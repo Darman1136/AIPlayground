@@ -5,6 +5,15 @@ using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour {
     private NavMeshAgent agent;
+    private PlayerInformation pi;
+    public PlayerInformation PlayerInformation {
+        get {
+            if (pi == null) {
+                pi = new PlayerInformation();
+            }
+            return pi;
+        }
+    }
 
     void Start() {
         agent = GetComponent<NavMeshAgent>();
@@ -19,7 +28,15 @@ public class PlayerController : MonoBehaviour {
                 agent.SetDestination(hit.point);
             }
         }
-      
+        if (Input.GetButtonDown("Fire2") && pi.BulletsRemaining > 0) {
+            SetFiring(true);
+        } else if(Input.GetButtonUp("Fire2") || pi.NeedsReload()) {
+            SetFiring(false);
+        }
+
+        if(Input.GetButtonDown("Reload")) {
+            Reload();
+        }
     }
 
     private void OnDrawGizmos() {
@@ -31,5 +48,15 @@ public class PlayerController : MonoBehaviour {
                 Gizmos.DrawLine(corners[i], corners[i + 1]);
             }
         }
+    }
+
+    private void SetFiring(bool fire) {
+        Debug.Log(fire);
+        pi.Firing = fire;
+    }
+
+    private void Reload() {
+        pi.BulletsRemaining = pi.ClipSize;
+        Debug.Log("Reloaded: " + pi.BulletsRemaining);
     }
 }

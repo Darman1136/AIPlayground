@@ -13,6 +13,15 @@ public class PlayerInformation {
         }
     }
 
+    private bool reloading = false;
+    public bool Reloading {
+        get {
+            return reloading;
+        }
+        set {
+            reloading = value;
+        }
+    }
 
     private int clipSize = 30;
     public int ClipSize {
@@ -36,5 +45,13 @@ public class PlayerInformation {
 
     public bool NeedsReload() {
         return bulletsRemaining == 0;
+    }
+
+    public void Reload() {
+        BulletsRemaining = ClipSize;
+    }
+
+    public void ShotFired() {
+        BulletsRemaining--;
     }
 }

@@ -14,28 +14,36 @@ public class PlayerController : MonoBehaviour {
             return pi;
         }
     }
+    private PlayerSoundController psc;
 
     void Start() {
         agent = GetComponent<NavMeshAgent>();
+        psc = GetComponent<PlayerSoundController>();
     }
 
     void Update() {
-        if (Input.GetButtonDown("Fire1")) {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit)) {
-                Debug.Log(hit.point);
-                agent.SetDestination(hit.point);
+        if (pi.Reloading == false) {
+            if (Input.GetButtonDown("Fire1")) {
+
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hit)) {
+                    Debug.Log(hit.point);
+                    agent.SetDestination(hit.point);
+                }
+            }
+
+            if (Input.GetButtonDown("Fire2") && pi.BulletsRemaining > 0) {
+                SetFiring(true);
+            } else if (Input.GetButtonUp("Fire2") || pi.NeedsReload()) {
+                SetFiring(false);
             }
         }
-        if (Input.GetButtonDown("Fire2") && pi.BulletsRemaining > 0) {
-            SetFiring(true);
-        } else if(Input.GetButtonUp("Fire2") || pi.NeedsReload()) {
-            SetFiring(false);
-        }
 
-        if(Input.GetButtonDown("Reload")) {
-            Reload();
+        if (Input.GetButtonDown("Reload")) {
+            if (CanReload()) {
+                Reload();
+            }
         }
     }
 
@@ -50,13 +58,19 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    private bool CanReload() {
+        return PlayerUtil.GetCurrentAgentSpeed(agent) == 0;
+    }
+
     private void SetFiring(bool fire) {
         Debug.Log(fire);
         pi.Firing = fire;
     }
 
     private void Reload() {
-        pi.BulletsRemaining = pi.ClipSize;
-        Debug.Log("Reloaded: " + pi.BulletsRemaining);
+        if (pi.Reloading == false) {
+            pi.Reloading = true;
+            psc.PlayReload();
+        }
     }
 }

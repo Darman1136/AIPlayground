@@ -7,20 +7,24 @@ public class PlayerAnimationController : MonoBehaviour {
     private NavMeshAgent agent;
     private Animator animator;
     private PlayerInformation pi;
+    private PlayerSoundController psc;
 
     void Start() {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         pi = GetComponent<PlayerController>().PlayerInformation;
+        psc = GetComponent<PlayerSoundController>();
     }
+
     void Update() {
         if (!HasArrived()) {
-            animator.SetFloat("Speed", GetCurrentAgentSpeed());
+            animator.SetFloat("Speed", PlayerUtil.GetCurrentAgentSpeed(agent));
         } else {
             animator.SetFloat("Speed", 0f);
         }
 
         animator.SetBool("Firing", pi.Firing);
+        animator.SetBool("Reloading", pi.Reloading);
     }
 
     private bool HasArrived() {
@@ -34,15 +38,16 @@ public class PlayerAnimationController : MonoBehaviour {
         return false;
     }
 
-    /** Normalized */
-    private float GetCurrentAgentSpeed() {
-        return Vector3.Magnitude(agent.velocity) / agent.speed;
-    }
-
     public void FireAnimationEvent() {
         if (pi.Firing) {
-            pi.BulletsRemaining--;
+            pi.ShotFired();
+            psc.PlayShotFired();
             Debug.Log(pi.BulletsRemaining);
         }
+    }
+
+    public void ReloadDoneAnimationEvent() {
+        pi.Reload();
+        pi.Reloading = false;
     }
 }

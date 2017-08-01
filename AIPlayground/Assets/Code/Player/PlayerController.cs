@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private bool CanReload() {
-        return PlayerUtil.GetCurrentAgentSpeed(agent) == 0;
+        return AIHelperMethods.GetCurrentAgentSpeed(agent) == 0;
     }
 
     private void SetFiring(bool fire) {

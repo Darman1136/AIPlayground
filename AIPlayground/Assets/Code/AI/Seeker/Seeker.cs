@@ -10,10 +10,12 @@ public class Seeker : AIController {
 	
 	void Update () {
         base.OnUpdate();
-        ScanForEnemy();
+        if (active) {
+            ScanForEnemy();
 
-        if(target) {
-            RotateTo(target);
+            if (target) {
+                RotateTo(target);
+            }
         }
     }
 

@@ -17,25 +17,14 @@ public class PlayerAnimationController : MonoBehaviour {
     }
 
     void Update() {
-        if (!HasArrived()) {
-            animator.SetFloat("Speed", PlayerUtil.GetCurrentAgentSpeed(agent));
+        if (!AIHelperMethods.HasArrived(agent)) {
+            animator.SetFloat("Speed", AIHelperMethods.GetCurrentAgentSpeed(agent));
         } else {
             animator.SetFloat("Speed", 0f);
         }
 
         animator.SetBool("Firing", pi.Firing);
         animator.SetBool("Reloading", pi.Reloading);
-    }
-
-    private bool HasArrived() {
-        if (!agent.pathPending) {
-            if (agent.remainingDistance <= agent.stoppingDistance) {
-                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public void FireAnimationEvent() {

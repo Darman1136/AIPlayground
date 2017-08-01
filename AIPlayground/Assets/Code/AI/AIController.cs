@@ -17,12 +17,16 @@ public abstract class AIController : MonoBehaviour {
 
     protected NavMeshAgent agent;
 
+    protected bool active = true;
+
     protected void OnStart() {
         agent = GetComponent<NavMeshAgent>();
     }
 
     protected void OnUpdate() {
-        //
+        if(active) {
+            //
+        }
     }
 
     private void OnDrawGizmos() {
@@ -53,8 +57,23 @@ public abstract class AIController : MonoBehaviour {
     }
 
     protected void RotateTo(GameObject go) {
-        Vector3 direction = (go.transform.position - transform.position).normalized;
+        RotateTo(go.transform);
+    }
+
+    protected void RotateTo(Transform t) {
+        Vector3 direction = (t.position - transform.position).normalized;
         Quaternion newRot = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, newRot, Time.deltaTime * turnSpeed);
+    }
+
+    protected bool HasArrived() {
+        if (!agent.pathPending) {
+            if (agent.remainingDistance <= agent.stoppingDistance) {
+                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

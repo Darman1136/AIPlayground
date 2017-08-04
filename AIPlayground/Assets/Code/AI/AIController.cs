@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class AIController : MonoBehaviour {
+public abstract class AIController : Controller {
     public Transform headTransform;
 
     [Range(1, 359)]
@@ -11,7 +11,7 @@ public abstract class AIController : MonoBehaviour {
     [Range(1, 100)]
     public float viewDistance = 30f;
     [Range(0f, 20f)]
-    public float turnSpeed = 120f;
+    public float turnSpeed = 10f;
 
     protected GameObject target;
 

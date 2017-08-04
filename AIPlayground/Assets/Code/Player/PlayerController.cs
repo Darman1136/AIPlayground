@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : Controller {
     private NavMeshAgent agent;
     private PlayerInformation pi;
     public PlayerInformation PlayerInformation {
@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private bool CanReload() {
-        return AIHelperMethods.GetCurrentAgentSpeed(agent) == 0;
+        return AIHelperMethods.GetCurrentAgentSpeed(this, agent) == 0;
     }
 
     private void SetFiring(bool fire) {

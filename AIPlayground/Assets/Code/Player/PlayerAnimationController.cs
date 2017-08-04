@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class PlayerAnimationController : MonoBehaviour {
     private NavMeshAgent agent;
     private Animator animator;
+    private PlayerController pc;
     private PlayerInformation pi;
     private PlayerSoundController psc;
 
@@ -14,11 +15,12 @@ public class PlayerAnimationController : MonoBehaviour {
         animator = GetComponent<Animator>();
         pi = GetComponent<PlayerController>().PlayerInformation;
         psc = GetComponent<PlayerSoundController>();
+        pc = GetComponent<PlayerController>();
     }
 
     void Update() {
         if (!AIHelperMethods.HasArrived(agent)) {
-            animator.SetFloat("Speed", AIHelperMethods.GetCurrentAgentSpeed(agent));
+            animator.SetFloat("Speed", AIHelperMethods.GetCurrentAgentSpeed(pc, agent));
         } else {
             animator.SetFloat("Speed", 0f);
         }
